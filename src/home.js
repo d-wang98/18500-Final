@@ -1,15 +1,8 @@
 import React from "react";
 import './App.css';
 import Button from '@mui/material/Button';
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Redirect,
-} from "react-router-dom";
-import Home from "./home"
-import Session from "./session"
-import Login from "./login"
+import { Link } from "react-router-dom";
+
 
 class App extends React.Component {
   constructor(props) {
@@ -30,13 +23,15 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        <Router>
-          <Routes>
-            <Route exact path="/" element={<Home/>} />
-            <Route path="/session" element={<Session/>} />
-            <Route path="/login" element={<Login/>} />
-          </Routes>
-        </Router>
+        <p>Tokens Earned: 0</p>
+        <p>Sessions Completed: 0</p>
+        <p>Sessions Failed: 0</p>
+        <Link to="/session">
+          <Button onClick={this.handleStartSession} variant="contained">Start Paymodoro</Button>
+        </Link>
+        <Link to="/login">
+          <Button onClick={this.handleLogin} variant="text">Login/Signup</Button>
+        </Link>
       </div>
         
     );
