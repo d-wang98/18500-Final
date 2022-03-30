@@ -5,7 +5,9 @@ import { Link } from "react-router-dom";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Userfront from "@userfront/core";
+import * as nearAPI from "near-api-js";
 Userfront.init("demo1234");
+
 
 class Login extends React.Component<any, any> {
   constructor(props) {
@@ -39,6 +41,30 @@ class Login extends React.Component<any, any> {
     console.log("back");
   };
 
+  handleLogin = async () => {
+    console.log("clicked!")
+
+    const { connect, keyStores, WalletConnection } = nearAPI;
+
+    const config: nearAPI.ConnectConfig = {
+      networkId: "testnet",
+      keyStore: new keyStores.BrowserLocalStorageKeyStore(),
+      nodeUrl: "https://rpc.testnet.near.org",
+      walletUrl: "https://wallet.testnet.near.org",
+      helperUrl: "https://helper.testnet.near.org",
+      headers:{},
+    };
+
+// connect to NEAR
+    const near = await connect(config);
+
+// create wallet connection
+    const wallet = new WalletConnection(near, null);
+    console.log(wallet)
+
+    console.log("connected?")
+  }
+  
   render() {
     return (
       <div>
@@ -61,7 +87,7 @@ class Login extends React.Component<any, any> {
               onChange={this.handleInputChange}
             />
           </label>
-          <button type="submit">Log in</button>
+          <Button2 onClick={this.handleLogin}>Log in</Button2>
         </form>
         <Link to="/">
           <Button2 onClick={this.handleBack} variant="contained">

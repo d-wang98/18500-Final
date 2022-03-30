@@ -9,7 +9,9 @@ class App extends React.Component {
     super(props);
     this.state = {
       loggedIn: false,
-      
+      tokensEarned: 0,
+      sessionsCompleted: 0,
+      sessionsFailed: 0,
     };
   }
   handleLogin = () => {
@@ -23,9 +25,9 @@ class App extends React.Component {
   render() {
     return (
       <div>
-        <p>Tokens Earned: 0</p>
-        <p>Sessions Completed: 0</p>
-        <p>Sessions Failed: 0</p>
+        <p>Tokens Earned: {this.state.tokensEarned}</p>
+        <p>Sessions Completed: {this.state.sessionsCompleted}</p>
+        <p>Sessions Failed: {this.state.sessionsFailed}</p>
         <Link to="/session">
           <Button onClick={this.handleStartSession} variant="contained">Start Paymodoro</Button>
         </Link>
