@@ -1,14 +1,13 @@
 import React from "react";
-import './App.css';
-import Button2 from '@mui/material/Button';
+import "./App.css";
+import Button2 from "@mui/material/Button";
 import { Link } from "react-router-dom";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Userfront from "@userfront/core";
 Userfront.init("demo1234");
 
-
-class Login extends React.Component {
+class Login extends React.Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
@@ -35,11 +34,10 @@ class Login extends React.Component {
       emailOrUsername: this.state.emailOrUsername,
       password: this.state.password,
     });
-  }  
+  }
   handleBack = () => {
-    console.log("back")
+    console.log("back");
   };
-
 
   render() {
     return (
@@ -66,7 +64,9 @@ class Login extends React.Component {
           <button type="submit">Log in</button>
         </form>
         <Link to="/">
-          <Button2 onClick={this.handleBack} variant="contained">Back</Button2>
+          <Button2 onClick={this.handleBack} variant="contained">
+            Back
+          </Button2>
         </Link>
       </div>
     );

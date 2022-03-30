@@ -5,7 +5,6 @@ import {
   BrowserRouter as Router,
   Routes,
   Route,
-  Redirect,
 } from "react-router-dom";
 import Home from "./home"
 import Session from "./session"
@@ -32,6 +31,7 @@ class App extends React.Component {
       <div>
         <Router>
           <Routes>
+            {/* @ts-ignore */}
             <Route exact path="/" element={<Home/>} />
             <Route path="/session" element={<Session/>} />
             <Route path="/login" element={<Login/>} />

@@ -4,7 +4,7 @@ import Button from '@mui/material/Button';
 import { Link } from "react-router-dom";
 
 
-class Session extends React.Component {
+class Session extends React.Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
