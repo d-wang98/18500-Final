@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './home';
 import Session from './Session';
 import Login from './login';
+import ConnectDevice from './ConnectDevice';
 
 export default function App() {
   const [state, setState] = useState({
@@ -25,6 +26,7 @@ export default function App() {
           {/* @ts-ignore */}
           <Route path="/session" element={<Session />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/connect-device" element={<ConnectDevice />} />
           <Route path="/*" element={<Home />} />
         </Routes>
       </Router>

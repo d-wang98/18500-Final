@@ -25,6 +25,11 @@ export default function Home() {
           Start Paymodoro
         </Button>
       </Link>
+      <Link to="/connect-device">
+        <Button  variant="text">
+        Connect Device
+        </Button>
+      </Link>
       <Link to="/login">
         <Button onClick={handleLogin} variant="text">
           Login/Signup

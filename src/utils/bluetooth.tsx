@@ -1,4 +1,17 @@
 import { BrowserWindow, ipcRenderer, ipcMain } from 'electron';
+import { execFile } from 'child_process';
+import { join } from 'path';
+
+export const startBT = () => {
+  console.log(__dirname);
+  const proc = execFile(
+    'n',
+    ['use', '10', '../paymadoro-contract/tmp-js-bluetooth/dist/main.js'],
+    (err, data) => {
+      if (err) console.error(err);
+    }
+  );
+};
 
 /** Utility function for waiting for async tasks */
 const sleep = (time: number) =>
