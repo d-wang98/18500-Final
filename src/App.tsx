@@ -32,7 +32,7 @@ class App extends React.Component {
         <Router>
           <Routes>
             {/* @ts-ignore */}
-            <Route exact path="/" element={<Home/>} />
+            <Route exact path="/" element={<Home loggedIn={this.state.loggedIn}/>} />
             <Route path="/session" element={<Session/>} />
             <Route path="/login" element={<Login/>} />
           </Routes>

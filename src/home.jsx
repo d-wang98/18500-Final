@@ -4,7 +4,7 @@ import Button from '@mui/material/Button';
 import { Link } from "react-router-dom";
 
 
-class App extends React.Component {
+class Home extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -40,4 +40,4 @@ class App extends React.Component {
   }
 }
 
-export default App;
+export default Home;
