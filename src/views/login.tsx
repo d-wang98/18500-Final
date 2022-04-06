@@ -35,7 +35,15 @@ export default function Login() {
     const wallet = new WalletConnection(near, null);
     console.log(wallet);
 
-    console.log('connected?');
+    const signIn = () => {
+      wallet.requestSignIn(
+        "dev-1649192632895-28253046722360.testnet", // contract requesting access
+      );
+    };
+    if(wallet.isSignedIn()) {
+      console.log("signedin")
+    }
+
   };
 
   return (
