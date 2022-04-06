@@ -24,7 +24,6 @@ export default function Login() {
       keyStore: new keyStores.BrowserLocalStorageKeyStore(),
       nodeUrl: 'https://rpc.testnet.near.org',
       walletUrl: 'https://wallet.testnet.near.org',
-      helperUrl: 'https://helper.testnet.near.org',
       headers: {},
     };
 
@@ -35,12 +34,18 @@ export default function Login() {
     const wallet = new WalletConnection(near, null);
     console.log(wallet);
 
-    const signIn = () => {
+    //signin
+    console.log(window.location.href)
+    console.log(wallet.isSignedIn())
+    if (!wallet.isSignedIn()) {
+      console.log("trying signin")
       wallet.requestSignIn(
-        "dev-1649192632895-28253046722360.testnet", // contract requesting access
-      );
-    };
-    if(wallet.isSignedIn()) {
+      "dev-1649192632895-28253046722360", // contract requesting access
+      "file:///Users/localoldman/Documents/CMU_Spring_22/18500/final/18500-final-project/build/index.html",
+      "file:///Users/localoldman/Documents/CMU_Spring_22/18500/final/18500-final-project/build/index.html"
+      
+    ); 
+    } else {
       console.log("signedin")
     }
 

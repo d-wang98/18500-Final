@@ -35,7 +35,6 @@
     "@emotion/react": "^11.8.2",
     "@emotion/styled": "^11.8.1",
     "@mui/material": "^5.5.3",
-    "bluetooth-serial-port": "^2.2.7",
     "near-api-js": "^0.44.2",
     "react-router-dom": "^6.2.2",
     "serialport": "^10.4.0"

@@ -46384,6 +46384,9 @@ const connectToDevice = () => __awaiter(void 0, void 0, void 0, function* () {
     const mainWindow = new electron_1.BrowserWindow({
         width: 800,
         height: 600,
+        webPreferences: {
+          webSecurity: false
+        }
     });
     //@ts-ignore
     mainWindow.webContents.on("select-bluetooth-device", (event, deviceList, callback) => {
