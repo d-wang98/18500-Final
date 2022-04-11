@@ -9,6 +9,7 @@ export const startBT = () => {
     ['use', '10', '../paymadoro-contract/tmp-js-bluetooth/dist/main.js'],
     (err, data) => {
       if (err) console.error(err);
+      else alert('Connecting bluetooth device, please be patient :)');
     }
   );
 };
