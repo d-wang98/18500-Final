@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './App.css';
-import Button2 from '@mui/material/Button';
+import Button from '@mui/material/Button';
 import { Link } from 'react-router-dom';
 import * as nearAPI from 'near-api-js';
 import { getThemeProps } from '@mui/system';
@@ -27,6 +27,7 @@ export default function Login({isLoggedIn}) {
 
   const handleLogin = async () => {
 
+    const baseUrl = 'file:///home/lev/code/18500/18500-Final';
     //signin
     console.log(window.location.href)
     console.log(myStoreState.wallet.isSignedIn())
@@ -38,15 +39,13 @@ export default function Login({isLoggedIn}) {
 
       myStoreState.wallet.requestSignIn(
       "dev-1649192632895-28253046722360", // contract requesting access
-      "file:///Users/localoldman/Documents/CMU_Spring_22/18500/final/18500-final-project/build/index.html",
-      "file:///Users/localoldman/Documents/CMU_Spring_22/18500/final/18500-final-project/build/index.html"
-      
+      `${baseUrl}/build/index.html`,
+      `${baseUrl}/build/index.html`,
     ); 
       console.log("slajfldsajlkfjsdoiagnadosibnoaidsnboia")
     } else {
-      console.log("signedin")
+      console.log('signedin');
     }
-
   };
 
   return (
@@ -57,9 +56,7 @@ export default function Login({isLoggedIn}) {
         {myStoreState.wallet.isSignedIn() ? <Button2 onClick={handleLogout}>Log out</Button2> : <Button2 onClick={handleLogin}>Log in</Button2>}
       </form>
       <Link to="/">
-        <Button2 onClick={handleBack} variant="contained">
-          Back
-        </Button2>
+        <Button variant="contained">Back</Button>
       </Link>
     </div>
   );
