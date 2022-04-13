@@ -1,19 +1,30 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
 import Button from '@mui/material/Button';
 import { Link } from 'react-router-dom';
+import { useStore } from 'react-stores';
+import { myStore } from './store';
+
 
 export default function Home() {
   const [state, setState] = useState({
     loggedIn: false,
   });
+  const myStoreState = useStore(myStore);
+
   const handleLogin = () => {
     console.log('login');
   };
 
   const handleStartSession = () => {
     console.log('starting paymodoro');
+  };  
+  
+  const handleCheck = () => {
+    console.log(myStoreState.wallet.account());
+    console.log(myStoreState.contract)
   };
+
 
   return (
     <div>
@@ -26,7 +37,7 @@ export default function Home() {
         </Button>
       </Link>
       <Link to="/connect-device">
-        <Button  variant="text">
+        <Button variant="text">
         Connect Device
         </Button>
       </Link>
@@ -35,6 +46,9 @@ export default function Home() {
           Login/Signup
         </Button>
       </Link>
+      <Button onClick={handleCheck} variant="text">
+        Check
+      </Button>
     </div>
   );
 }

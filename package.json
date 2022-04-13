@@ -8,8 +8,8 @@
     "start": "webpack --config ./webpack.config.js --watch",
     "build": "webpack --config ./webpack.config.js"
   },
-  "engines" : { 
-    "node" : ">=16.0.0"
+  "engines": {
+    "node": ">=16.0.0"
   },
   "keywords": [],
   "author": "Ben Duncan <ben@cascadiaconcepts.com> (http://benduncan.me)",
@@ -21,8 +21,8 @@
     "css-loader": "5.2.7",
     "electron": "8.0.0",
     "html-webpack-plugin": "3.2.0",
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0",
+    "react": "^17.0.0",
+    "react-dom": "^17.0.0",
     "scss-loader": "0.0.1",
     "style-loader": "2.0.0",
     "ts-loader": "6.2.1",
@@ -37,6 +37,7 @@
     "@mui/material": "^5.5.3",
     "near-api-js": "^0.44.2",
     "react-router-dom": "^6.2.2",
+    "react-stores": "^5.5.0",
     "serialport": "^10.4.0"
   }
 }
