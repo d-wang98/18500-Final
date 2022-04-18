@@ -53,7 +53,7 @@ export default function Login({isLoggedIn}) {
       <form>
         <label>Email or username</label>
         <label>Password</label>
-        {myStoreState.wallet.isSignedIn() ? <Button onClick={handleLogout}>Log out</Button> : <Button onClick={handleLogin}>Log in</Button>}
+        {myStoreState.wallet.isSignedIn() ? <Button onClick={handleLogout}>Log out</Button> : <Button onClick={handleLogin}>Log in</Button  >}
       </form>
       <Link to="/">
         <Button variant="contained">Back</Button>
