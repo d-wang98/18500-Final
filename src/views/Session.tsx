@@ -3,6 +3,7 @@ import './App.css';
 import Button from '@mui/material/Button';
 import { Link } from 'react-router-dom';
 import { csv } from 'd3';
+
 export default function Session() {
   const [state, setState] = useState({
     timeElapsed: 0,
@@ -16,7 +17,9 @@ export default function Session() {
   const [seconds, setSeconds] = useState(0);
   const [isActive, setIsActive] = useState(false);
   const [data, setData] = useState([]);
-
+  const [hr, setHr] = useState(0);
+  const [time, setTime] = useState(0);
+  const [acc, setAcc] = useState(0);
 
   function toggle() {
     setIsActive(!isActive);
@@ -26,6 +29,26 @@ export default function Session() {
     setSeconds(0);
     setIsActive(false);
   }
+
+  useEffect(() => {
+    const baseUrl = "/Users/localoldman/Documents/CMU_Spring_22/18500/final/18500-final-project"
+    csv(`${baseUrl}/data.csv`).then(data => {
+      setData(data);
+    });
+  }, []);
+
+  useEffect(() => {
+    if (data[data.length - 1] === undefined){
+      setTime(0);
+      setAcc(0);
+      setHr(0);
+    } else {
+      setTime(data[data.length - 1].time);
+      setAcc(data[data.length - 1].acceleration);
+      setHr(data[data.length - 1].hr);
+    }
+  })
+  console.log("hi", acc, time, hr);
 
   useEffect(() => {
     let interval = null;
@@ -47,9 +70,9 @@ export default function Session() {
   return (
     <div>
       <p>Time Elapsed: {Math.floor(seconds/60).toString().padStart(2, '0')}:{(seconds%60).toString().padStart(2, '0')} / 25:00</p>
-      <p>Heart Rate: {state.heartRate} BPM</p>
+      <p>Heart Rate: {hr} BPM</p>
       <p>Sound: {state.sound} dB</p>
-      <p>Movement: {state.movement} ms^-2</p>
+      <p>Movement: {acc} ms^-2</p>
 
       <button className={`button button-primary button-primary-${isActive ? 'active' : 'inactive'}`} onClick={toggle}>
         {isActive ? 'Pause' : 'Start'}
