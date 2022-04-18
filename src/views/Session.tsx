@@ -20,6 +20,7 @@ export default function Session() {
   const [hr, setHr] = useState(0);
   const [time, setTime] = useState(0);
   const [acc, setAcc] = useState(0);
+  const [sound, setSound] = useState(0);
 
   function toggle() {
     setIsActive(!isActive);
@@ -43,9 +44,12 @@ export default function Session() {
       setAcc(0);
       setHr(0);
     } else {
-      setTime(data[data.length - 1].time);
-      setAcc(data[data.length - 1].acceleration);
-      setHr(data[data.length - 1].hr);
+      const recData = data[data.length - 1];
+      const acceleration = recData.aX + recData.aY + recData.aZ
+      setTime(recData.time);
+      setAcc(acc - acceleration);
+      setHr(recData.hr);
+      setSound(recData.soundDB)
     }
   })
   console.log("hi", acc, time, hr);
@@ -71,7 +75,7 @@ export default function Session() {
     <div>
       <p>Time Elapsed: {Math.floor(seconds/60).toString().padStart(2, '0')}:{(seconds%60).toString().padStart(2, '0')} / 25:00</p>
       <p>Heart Rate: {hr} BPM</p>
-      <p>Sound: {state.sound} dB</p>
+      <p>Sound: {sound} dB</p>
       <p>Movement: {acc} ms^-2</p>
 
       <button className={`button button-primary button-primary-${isActive ? 'active' : 'inactive'}`} onClick={toggle}>
