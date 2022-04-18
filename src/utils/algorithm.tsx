@@ -80,35 +80,35 @@ const failForRows = (
   const boolToInt = (b) => (b ? 1 : 0);
 
   // Check for double criteria failure
-  const { maxFailed } = failedPerTime
-    .slice(0, failedPerTime.length - 1)
-    .reduce(
-      (accum, time, i) => {
-        const numbFailed =
-          boolToInt(time.accelFailed) +
-          boolToInt(time.hrFailed) +
-          boolToInt(time.soundFailed);
+  const { maxFailed } = failedPerTime.slice(0, failedPerTime.length - 1).reduce(
+    (accum, time, i) => {
+      const numbFailed =
+        boolToInt(time.accelFailed) +
+        boolToInt(time.hrFailed) +
+        boolToInt(time.soundFailed);
 
-        if (numbFailed >= 2) {
-          const currentFailed =
-            accum.current + (failedPerTime[i + 1].time - time.time);
-          console.log("More than 2 failed", currentFailed)
-          const maxFailed = Math.max(currentFailed, accum.maxFailed);
-          return {
-            maxFailed,
-            current: currentFailed,
-          };
-        } else {
-          return {
-            maxFailed: accum.maxFailed,
-            current: 0,
-          };
-        }
-      },
-      { maxFailed: 0, current: 0 }
-    );
+      if (numbFailed >= 2) {
+        const currentFailed =
+          accum.current + (failedPerTime[i + 1].time - time.time);
+        console.log('More than 2 failed', currentFailed);
+        const maxFailed = Math.max(currentFailed, accum.maxFailed);
+        return {
+          maxFailed,
+          current: currentFailed,
+        };
+      } else {
+        return {
+          maxFailed: accum.maxFailed,
+          current: 0,
+        };
+      }
+    },
+    { maxFailed: 0, current: 0 }
+  );
 
-  return true;
+  console.log(maxFailed, 'aaa');
+
+  return maxFailed < TWO_CRITERIA_FAILURE_CONTINOUS_TIME_MS;
 };
 
 export const calculateFocusScore = async (

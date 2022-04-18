@@ -6,9 +6,34 @@ import ScanningView from './Scanning';
 
 export default function ConnectDevice() {
   useEffect(() => {}, []);
+  const [clicked, setClicked] = useState(false);
+
+  const startWrapper = () => {
+    setClicked(true);
+    startBT();
+  };
   return (
     <>
-      <Button onClick={startBT}>Connect Device</Button>
+      {clicked && (
+        <>
+          <h2>Please Wait</h2>
+          <p>
+            Please wait until the device's bluetooth indicator light stops
+            flashing.
+          </p>
+          <p>
+            Once the flashing stops, please go to the
+            <Link to="/session">
+              <Button>Sessions Page</Button>
+            </Link>
+          </p>
+        </>
+      )}
+
+      <Button onClick={startWrapper}>
+        {clicked && <>Connecting Device...</>}
+        {!clicked && <>Connect Device</>}
+      </Button>
       <Link to="/">
         <Button variant="contained">Back</Button>
       </Link>

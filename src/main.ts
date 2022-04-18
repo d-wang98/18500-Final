@@ -1,5 +1,5 @@
 import { app, BrowserWindow } from 'electron';
-import { readCSV } from './utils/algorithm';
+import { calculateFocusScore } from './utils/algorithm';
 import { setupBluetooth } from './utils/bluetooth';
 app.commandLine.appendSwitch('enable-web-bluetooth', 'true');
 app.commandLine.appendSwitch('enable-experimental-web-platform-features', 'true');
@@ -17,8 +17,12 @@ function createWindow() {
 
   // and load the index.html of the app.
   window.loadFile('./index.html');
+  setInterval(() => {
+    const timeEnd = Date.now()
+    const timeStart = Date.now() - 20 * 10000
+    calculateFocusScore(timeStart, timeEnd)
+  }, 1000)
   //setupBluetooth(window);
-  readCSV()
 }
 
 app.on('ready', createWindow);
