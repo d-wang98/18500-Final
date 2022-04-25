@@ -13,7 +13,6 @@ export default function Session() {
     movement: 0,
   });
 
-
   const [seconds, setSeconds] = useState(0);
   const [isActive, setIsActive] = useState(false);
   const [data, setData] = useState([]);
@@ -32,33 +31,34 @@ export default function Session() {
   }
 
   useEffect(() => {
-    const baseUrl = "/Users/localoldman/Documents/CMU_Spring_22/18500/final/18500-final-project"
-    csv(`${baseUrl}/data.csv`).then(data => {
+    const baseUrl =
+      '/Users/localoldman/Documents/CMU_Spring_22/18500/final/18500-final-project';
+    csv(`${baseUrl}/data.csv`).then((data) => {
       setData(data);
     });
   }, []);
 
   useEffect(() => {
-    if (data[data.length - 1] === undefined){
+    if (data[data.length - 1] === undefined) {
       setTime(0);
       setAcc(0);
       setHr(0);
     } else {
       const recData = data[data.length - 1];
-      const acceleration = recData.aX + recData.aY + recData.aZ
+      const acceleration = recData.aX + recData.aY + recData.aZ;
       setTime(recData.time);
       setAcc(acc - acceleration);
       setHr(recData.hr);
-      setSound(recData.soundDB)
+      setSound(recData.soundDB);
     }
-  })
-  console.log("hi", acc, time, hr);
+  });
+  console.log('hi', acc, time, hr);
 
   useEffect(() => {
     let interval = null;
     if (isActive) {
       interval = setInterval(() => {
-        setSeconds(seconds => seconds + 1);
+        setSeconds((seconds) => seconds + 1);
       }, 1000);
     } else if (!isActive && seconds !== 0) {
       clearInterval(interval);
@@ -66,29 +66,46 @@ export default function Session() {
     return () => clearInterval(interval);
   }, [isActive, seconds]);
 
-
   const handleStartSession = () => {
     console.log('starting paymodoro');
   };
 
   return (
-    <div>
-      <p>Time Elapsed: {Math.floor(seconds/60).toString().padStart(2, '0')}:{(seconds%60).toString().padStart(2, '0')} / 25:00</p>
-      <p>Heart Rate: {hr} BPM</p>
-      <p>Sound: {sound} dB</p>
-      <p>Movement: {acc} ms^-2</p>
+    <div
+      style={{
+        display: 'grid',
+      }}
+    >
+      <h3>
+        Time Elapsed:{' '}
+        {Math.floor(seconds / 60)
+          .toString()
+          .padStart(2, '0')}
+        :{(seconds % 60).toString().padStart(2, '0')} / 25:00
+      </h3>
+      <h3>Heart Rate: {hr} BPM</h3>
+      <h3>Sound: {sound} dB</h3>
+      <h3>Movement: {acc} ms^-2</h3>
 
-      <button className={`button button-primary button-primary-${isActive ? 'active' : 'inactive'}`} onClick={toggle}>
-        {isActive ? 'Pause' : 'Start'}
-      </button>
-      <button className="button" onClick={reset}>
-        Reset
-      </button>
+      <div>
+        <button
+          className={`button button-primary button-primary-${
+            isActive ? 'active' : 'inactive'
+          }`}
+          onClick={toggle}
+        >
+          {isActive ? 'Pause' : 'Start'}
+        </button>
+        <button className="button" onClick={reset}>
+          Reset
+        </button>
+      </div>
       <Link to="/">
         <Button onClick={handleStartSession} variant="contained">
           End Session
         </Button>
       </Link>
+      <img src="mario.png" alt="" />
     </div>
   );
 }
