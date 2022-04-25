@@ -55,6 +55,7 @@ export default function Home() {
       <h2>Tokens Earned: 4</h2>
       <h2>Sessions Completed: 6</h2>
       <h2>Sessions Failed: 2</h2>
+      <img src="tomato.png" alt="" />
     </div>
   );
 }
