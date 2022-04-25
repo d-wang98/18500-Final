@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom';
 import { useStore } from 'react-stores';
 import { myStore } from './store';
 
-
 export default function Home() {
   const [state, setState] = useState({
     loggedIn: false,
@@ -18,37 +17,44 @@ export default function Home() {
 
   const handleStartSession = () => {
     console.log('starting paymodoro');
-  };  
-  
-  const handleCheck = () => {
-    console.log(myStoreState.wallet.account());
-    console.log(myStoreState.contract)
   };
 
+  const handleCheck = () => {
+    console.log(myStoreState.wallet.account());
+    console.log(myStoreState.contract);
+  };
 
   return (
-    <div>
-      <p>Tokens Earned: 0</p>
-      <p>Sessions Completed: 0</p>
-      <p>Sessions Failed: 0</p>
-      <Link to="/session">
-        <Button onClick={handleStartSession} variant="contained">
-          Start Paymodoro
-        </Button>
-      </Link>
-      <Link to="/connect-device">
-        <Button variant="text">
-        Connect Device
-        </Button>
-      </Link>
-      <Link to="/login">
-        <Button onClick={handleLogin} variant="text">
-          Login/Signup
-        </Button>
-      </Link>
-      <Button onClick={handleCheck} variant="text">
-        Check
-      </Button>
+    <div className="main-wrapper">
+      <h1>Paymadoro</h1>
+      <div
+        style={{
+          display: 'grid',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gridTemplateColumns: '1fr 1fr 1fr 1fr',
+          textAlign: 'left',
+          gap: '1rem',
+          width: 'auto',
+        }}
+      >
+        <Link to="/session">
+          <Button onClick={handleStartSession} variant="contained">
+            Start Paymodoro
+          </Button>
+        </Link>
+        <Link to="/connect-device">
+          <Button variant="contained">Connect Device</Button>
+        </Link>
+        <Link to="/login">
+          <Button variant="contained" onClick={handleLogin}>
+            Login/Signup
+          </Button>
+        </Link>
+      </div>
+      <h2>Tokens Earned: 4</h2>
+      <h2>Sessions Completed: 6</h2>
+      <h2>Sessions Failed: 2</h2>
     </div>
   );
 }

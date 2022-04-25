@@ -14,6 +14,12 @@ export default function ConnectDevice() {
   };
   return (
     <>
+      {!clicked && (
+        <>
+          <h2>Connection Time!</h2>
+          <p>Please connect to your device. It should be blinking blue</p>
+        </>
+      )}
       {clicked && (
         <>
           <h2>Please Wait</h2>
@@ -30,11 +36,11 @@ export default function ConnectDevice() {
         </>
       )}
 
-      <Button onClick={startWrapper}>
+      <Button onClick={startWrapper} variant="contained">
         {clicked && <>Connecting Device...</>}
         {!clicked && <>Connect Device</>}
       </Button>
-      <Link to="/">
+      <Link style={{ margin: '1rem' }} to="/">
         <Button variant="contained">Back</Button>
       </Link>
     </>

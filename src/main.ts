@@ -17,11 +17,6 @@ function createWindow() {
 
   // and load the index.html of the app.
   window.loadFile('./index.html');
-  setInterval(() => {
-    const timeEnd = Date.now()
-    const timeStart = Date.now() - 20 * 10000
-    calculateFocusScore(timeStart, timeEnd)
-  }, 1000)
   //setupBluetooth(window);
 }
 
