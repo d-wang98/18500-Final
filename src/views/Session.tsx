@@ -11,7 +11,7 @@ import {
 } from './store';
 import { useStore } from 'react-stores';
 import { utils } from 'near-api-js';
-import { calculateIsFocused } from '../utils/algorithm';
+import { calculateIsFocused, getBaseLevelSound } from '../utils/algorithm';
 
 const totalTimeMs = 10 * 1000; // 10 s
 
@@ -38,16 +38,21 @@ export default function Session() {
   const [currentFailed, setCurrentFailed] = useState<string[]>([]);
 
   useEffect(() => {
-    setInterval(async () => {
-      const timeEnd = Date.now();
-      const timeStart = Date.now() - 3 * 1000;
-      const { success, criteriaFailed } = await calculateIsFocused(
-        timeStart,
-        timeEnd
-      );
-      setCurrentStatus(success);
-      setCurrentFailed(criteriaFailed);
-    }, 1000);
+    (async () => {
+      const soundBaseLevel = await getBaseLevelSound();
+      console.log('base level sound', soundBaseLevel);
+      setInterval(async () => {
+        const timeEnd = Date.now();
+        const timeStart = Date.now() - 2 * 1000;
+        const { success, criteriaFailed } = await calculateIsFocused(
+          timeStart,
+          timeEnd,
+          soundBaseLevel
+        );
+        setCurrentStatus(success);
+        setCurrentFailed(criteriaFailed);
+      }, 1000);
+    })();
   }, []);
 
   const startSession = async () => {
@@ -72,12 +77,15 @@ export default function Session() {
     const _endTime = endTime || Date.now();
     const startTime = _endTime - seconds * 1000;
 
-    const success = await calculateIsFocused(startTime, _endTime);
+    const { success, criteriaFailed } = await calculateIsFocused(
+      startTime,
+      _endTime
+    );
     console.log(success);
     setIsActive(false);
     alert(
       `Your pomodoro session is complete. You ${
-        success ? 'succeeded' : 'failed'
+        success ? 'succeeded' : `failed because of ${criteriaFailed.join(', ')}`
       }`
     );
     await (store.contract as any).end_session({
@@ -187,7 +195,7 @@ export default function Session() {
               padding: '1rem',
             }}
           >
-            <h2>Looks like you are currently succeeding!</h2>
+            <h2>All checks passed! You are in a focused environment</h2>
           </div>
         )}
         {!currentStatus && (
@@ -196,14 +204,13 @@ export default function Session() {
             style={{ background: 'red', borderRadius: '1rem', padding: '1rem' }}
           >
             <h2>
-              Looks like you are currently failing. You can do better; try
-              improving on
+              Looks like you are currently failing. Try improving on
+              <ul>
+                {currentFailed.map((crit) => (
+                  <li>{crit}</li>
+                ))}
+              </ul>
             </h2>
-            <ul>
-              {currentFailed.map((crit) => (
-                <>{crit}</>
-              ))}
-            </ul>
           </div>
         )}
       </div>

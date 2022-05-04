@@ -4,11 +4,11 @@ import csv from 'csv-parser';
 // const TWO_CRITERIA_FAILURE_CONTINOUS_TIME_MS = 10;
 // const SINGLE_CRITERIA_FAILURE_MS = 10; //6.25 * 60 * 1000;
 const TWO_CRITERIA_FAILURE_FRAC = 1 / 100;
-const SINGLE_CRITERIA_FAILURE_FRAC = 3 / 100;
+const SINGLE_CRITERIA_FAILURE_FRAC = 2 / 100;
 const DELAY_TIME = 1000;
 
-const SOUND_INCR_FAILURE_DB = 5;
-const ACCELERATION_FAILURE_DIFF = 0.2;
+const SOUND_INCR_FAILURE_DB = 3;
+const ACCELERATION_FAILURE_DIFF = 0.25;
 const HR_INCR_PROP_FAILURE = 1.4;
 
 interface IRet {
@@ -60,6 +60,7 @@ const failForRows = (
         Math.pow(row.aY - previousRow.aY, 2) +
         Math.pow(row.aZ - previousRow.aZ, 1)
     );
+    console.log(row.soundDB, initSoundDB);
     return {
       accelFailed: accelerationDiffMag > ACCELERATION_FAILURE_DIFF,
       hrFailed: row.hr / initHR > HR_INCR_PROP_FAILURE,
@@ -149,7 +150,8 @@ const failForRows = (
 
 export const calculateIsFocused = async (
   timeStartMillis: number,
-  timeEndMillis: number
+  timeEndMillis: number,
+  baseLevelSoundDB?
 ): Promise<IRet> => {
   const rows = await readCSV();
   let initIdx = -1;
@@ -167,10 +169,17 @@ export const calculateIsFocused = async (
 
   return failForRows(
     rowsWithinTime,
-    rowsWithinTime[0].soundDB,
+    baseLevelSoundDB !== undefined
+      ? baseLevelSoundDB
+      : rowsWithinTime[0].soundDB,
     80, // TODO: change?
     initIdx,
     rows,
     timeEndMillis - timeStartMillis
   );
 };
+
+export const getBaseLevelSound = async (): Promise<number> => {
+  const rows = await readCSV();
+  return rows[0].soundDB
+}
