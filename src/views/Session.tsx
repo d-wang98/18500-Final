@@ -166,9 +166,9 @@ export default function Session() {
         :{(seconds % 60).toString().padStart(2, '0')} /
         {Math.floor(totalTimeMs / 60000)}:{Math.floor(totalTimeMs / 1000) % 60}
       </h3>
-      <h3>Heart Rate: {hr} BPM</h3>
+      {/* <h3>Heart Rate: {hr} BPM</h3>
       <h3>Sound: {sound} dB</h3>
-      <h3>Movement: {acc} ms^-2</h3>
+      <h3>Movement: {acc} ms^-2</h3> */}
 
       <div>
         <button
