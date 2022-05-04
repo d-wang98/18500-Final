@@ -1,5 +1,5 @@
 import { app, BrowserWindow } from 'electron';
-import { calculateFocusScore } from './utils/algorithm';
+import { calculateIsFocused } from './utils/algorithm';
 import { setupBluetooth } from './utils/bluetooth';
 app.commandLine.appendSwitch('enable-web-bluetooth', 'true');
 app.commandLine.appendSwitch('enable-experimental-web-platform-features', 'true');

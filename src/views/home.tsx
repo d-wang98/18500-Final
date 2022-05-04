@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
 import Button from '@mui/material/Button';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useStore } from 'react-stores';
-import { myStore } from './store';
+import { myStore, SESSION_ENDED, SESSION_STARTED } from './store';
 
 export default function Home() {
   const [state, setState] = useState({
@@ -23,6 +23,16 @@ export default function Home() {
     console.log(myStoreState.wallet.account());
     console.log(myStoreState.contract);
   };
+  let nav = useNavigate();
+
+  useEffect(() => {
+    if (window.location.href.includes(SESSION_STARTED)) {
+      nav('/session#started');
+    }
+    if (window.location.href.includes(SESSION_ENDED)) {
+      nav('/session#ended');
+    }
+  }, []);
 
   return (
     <div className="main-wrapper">

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
 import './App.css';
 import Button from '@mui/material/Button';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
@@ -8,21 +9,14 @@ import Login from './login';
 import ConnectDevice from './ConnectDevice';
 import * as nearAPI from 'near-api-js';
 import { useStore } from 'react-stores';
-import { myStore } from './store';
-import { calculateFocusScore } from '../utils/algorithm';
+import { myStore, SESSION_STARTED } from './store';
+import { calculateIsFocused } from '../utils/algorithm';
 
 export default function App() {
+
   const [state, setState] = useState({
     loggedIn: false,
   });
-
-  useEffect(() => {
-    setInterval(() => {
-      const timeEnd = Date.now();
-      const timeStart = Date.now() - 5 * 1000;
-      calculateFocusScore(timeStart, timeEnd);
-    }, 1000);
-  }, []);
 
   const handleWallet = async () => {
     const { connect, keyStores, WalletConnection } = nearAPI;
@@ -43,7 +37,7 @@ export default function App() {
 
     const contract = new nearAPI.Contract(
       wallet.account(), // the account object that is connecting
-      'dev-1649192632895-28253046722360.testnet',
+      'dev-1649192632895-28253046722360',
       {
         // name of contract you're connecting to
         viewMethods: ['get_active_users', 'get_results'], // view methods do not change state but usually return a value
@@ -61,6 +55,8 @@ export default function App() {
 
   useEffect(() => {
     handleWallet();
+
+    // TODO: push history and have props in session
   });
 
   return (

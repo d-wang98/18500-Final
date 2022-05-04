@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import * as nearAPI from 'near-api-js';
 import { getThemeProps } from '@mui/system';
 import { useStore } from 'react-stores';
-import { myStore } from './store';
+import { defaultRedirectUrl, myStore } from './store';
 
 export default function Login({ isLoggedIn }) {
   const [state, setState] = useState({
@@ -24,7 +24,6 @@ export default function Login({ isLoggedIn }) {
   };
 
   const handleLogin = async () => {
-    const baseUrl = 'file:///home/lev/code/18500/18500-Final';
     //signin
     console.log(window.location.href);
     console.log(myStoreState.wallet.isSignedIn());
@@ -35,8 +34,8 @@ export default function Login({ isLoggedIn }) {
 
       myStoreState.wallet.requestSignIn(
         'dev-1649192632895-28253046722360', // contract requesting access
-        `${baseUrl}/build/index.html`,
-        `${baseUrl}/build/index.html`
+        defaultRedirectUrl,
+        defaultRedirectUrl
       );
       console.log('slajfldsajlkfjsdoiagnadosibnoaidsnboia');
     } else {

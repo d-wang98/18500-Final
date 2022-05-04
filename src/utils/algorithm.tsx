@@ -1,8 +1,10 @@
 import { createReadStream, readFileSync } from 'original-fs';
 import csv from 'csv-parser';
 
-const TWO_CRITERIA_FAILURE_CONTINOUS_TIME_MS = 10;
-const SINGLE_CRITERIA_FAILURE_MS = 10; //6.25 * 60 * 1000;
+// const TWO_CRITERIA_FAILURE_CONTINOUS_TIME_MS = 10;
+// const SINGLE_CRITERIA_FAILURE_MS = 10; //6.25 * 60 * 1000;
+const TWO_CRITERIA_FAILURE_FRAC = 1 / 100;
+const SINGLE_CRITERIA_FAILURE_FRAC = 2 / 100;
 const DELAY_TIME = 1000;
 
 const SOUND_INCR_FAILURE_DB = 5;
@@ -41,7 +43,8 @@ const failForRows = (
   initSoundDB: number,
   initHR: number,
   initIndex: number,
-  allData: Data[]
+  allData: Data[],
+  totalTimeMs: number
 ) => {
   // Discard the first time as it used for differencing
 
@@ -73,9 +76,12 @@ const failForRows = (
   // TODO: j change alg to "count"
   // Check for single criteria failure
   if (
-    getTotalTimeFailed('accelFailed') > SINGLE_CRITERIA_FAILURE_MS ||
-    getTotalTimeFailed('hrFailed') > SINGLE_CRITERIA_FAILURE_MS ||
-    getTotalTimeFailed('soundFailed') > SINGLE_CRITERIA_FAILURE_MS
+    getTotalTimeFailed('accelFailed') >
+      SINGLE_CRITERIA_FAILURE_FRAC * totalTimeMs ||
+    getTotalTimeFailed('hrFailed') >
+      SINGLE_CRITERIA_FAILURE_FRAC * totalTimeMs ||
+    getTotalTimeFailed('soundFailed') >
+      SINGLE_CRITERIA_FAILURE_FRAC * totalTimeMs
   ) {
     console.log('FAIL');
     return false;
@@ -113,28 +119,33 @@ const failForRows = (
 
   console.log(maxFailed, 'aaa');
 
-  return maxFailed < TWO_CRITERIA_FAILURE_CONTINOUS_TIME_MS;
+  return maxFailed < TWO_CRITERIA_FAILURE_FRAC * totalTimeMs;
 };
 
-export const calculateFocusScore = async (
-  timeStart: number,
-  timeEnd: number
+export const calculateIsFocused = async (
+  timeStartMillis: number,
+  timeEndMillis: number
 ): Promise<boolean> => {
   const rows = await readCSV();
   let initIdx = -1;
   const rowsWithinTime = rows.filter((r, i) => {
-    if (initIdx === -1 && r.time >= timeStart && r.time <= timeEnd) {
+    if (
+      initIdx === -1 &&
+      r.time >= timeStartMillis &&
+      r.time <= timeEndMillis
+    ) {
       initIdx = i;
     }
-    return r.time >= timeStart && r.time <= timeEnd;
+    return r.time >= timeStartMillis && r.time <= timeEndMillis;
   });
-  if (!rowsWithinTime[0]) return true
+  if (!rowsWithinTime[0]) return true;
 
   return failForRows(
     rowsWithinTime,
     rowsWithinTime[0].soundDB,
     80, // TODO: change?
     initIdx,
-    rows
+    rows,
+    timeEndMillis - timeStartMillis
   );
 };
