@@ -2,6 +2,18 @@
   text-align: center;
 }
 
+.currentStatus {
+  padding: 1rem;
+}
+
+.fail {
+  background: rgb(231, 98, 98);
+}
+
+.success {
+  background: rgb(150, 240, 146);
+}
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;

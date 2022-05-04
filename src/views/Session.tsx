@@ -34,14 +34,19 @@ export default function Session() {
   const [time, setTime] = useState(0);
   const [acc, setAcc] = useState(0);
   const [sound, setSound] = useState(0);
-  const [currentStatus, setCurrentStatus] = useState(false);
+  const [currentStatus, setCurrentStatus] = useState(true);
+  const [currentFailed, setCurrentFailed] = useState<string[]>([]);
 
   useEffect(() => {
     setInterval(async () => {
       const timeEnd = Date.now();
-      const timeStart = Date.now() - 5 * 1000;
-      const current = await calculateIsFocused(timeStart, timeEnd);
-      setCurrentStatus(current);
+      const timeStart = Date.now() - 3 * 1000;
+      const { success, criteriaFailed } = await calculateIsFocused(
+        timeStart,
+        timeEnd
+      );
+      setCurrentStatus(success);
+      setCurrentFailed(criteriaFailed);
     }, 1000);
   }, []);
 
@@ -58,8 +63,6 @@ export default function Session() {
     });
     toggle();
   };
-
-  const getCurrentSuccess = () => {};
 
   const endSession = async (endTime?: number) => {
     if (!store.contract) {
@@ -174,6 +177,36 @@ export default function Session() {
       <Link to="/">
         <Button>Back</Button>
       </Link>
+      <div>
+        {currentStatus && (
+          <div
+            className="currentStatus success"
+            style={{
+              background: 'rgb(150, 240, 146)',
+              borderRadius: '1rem',
+              padding: '1rem',
+            }}
+          >
+            <h2>Looks like you are currently succeeding!</h2>
+          </div>
+        )}
+        {!currentStatus && (
+          <div
+            className="currentStatus fail"
+            style={{ background: 'red', borderRadius: '1rem', padding: '1rem' }}
+          >
+            <h2>
+              Looks like you are currently failing. You can do better; try
+              improving on
+            </h2>
+            <ul>
+              {currentFailed.map((crit) => (
+                <>{crit}</>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
       <img src="mario.png" alt="" />
     </div>
   );

@@ -4,12 +4,17 @@ import csv from 'csv-parser';
 // const TWO_CRITERIA_FAILURE_CONTINOUS_TIME_MS = 10;
 // const SINGLE_CRITERIA_FAILURE_MS = 10; //6.25 * 60 * 1000;
 const TWO_CRITERIA_FAILURE_FRAC = 1 / 100;
-const SINGLE_CRITERIA_FAILURE_FRAC = 2 / 100;
+const SINGLE_CRITERIA_FAILURE_FRAC = 3 / 100;
 const DELAY_TIME = 1000;
 
 const SOUND_INCR_FAILURE_DB = 5;
 const ACCELERATION_FAILURE_DIFF = 0.2;
 const HR_INCR_PROP_FAILURE = 1.4;
+
+interface IRet {
+  success: boolean;
+  criteriaFailed: string[];
+}
 
 interface Data {
   time: number;
@@ -45,7 +50,7 @@ const failForRows = (
   initIndex: number,
   allData: Data[],
   totalTimeMs: number
-) => {
+): IRet => {
   // Discard the first time as it used for differencing
 
   const failedPerTime = rowsWithinTime.map((row, i) => {
@@ -74,17 +79,23 @@ const failForRows = (
   };
 
   // TODO: j change alg to "count"
+  const tA = getTotalTimeFailed('accelFailed');
+  const singleAccelF = tA > SINGLE_CRITERIA_FAILURE_FRAC * totalTimeMs;
+  const tHR = getTotalTimeFailed('hrFailed');
+  const singleHrF = tHR > SINGLE_CRITERIA_FAILURE_FRAC * totalTimeMs;
+  const tS = getTotalTimeFailed('soundFailed');
+  const singleSoundFailed = tS > SINGLE_CRITERIA_FAILURE_FRAC * totalTimeMs;
   // Check for single criteria failure
-  if (
-    getTotalTimeFailed('accelFailed') >
-      SINGLE_CRITERIA_FAILURE_FRAC * totalTimeMs ||
-    getTotalTimeFailed('hrFailed') >
-      SINGLE_CRITERIA_FAILURE_FRAC * totalTimeMs ||
-    getTotalTimeFailed('soundFailed') >
-      SINGLE_CRITERIA_FAILURE_FRAC * totalTimeMs
-  ) {
+  if (singleAccelF || singleHrF || singleSoundFailed) {
     console.log('FAIL');
-    return false;
+    const critFail = [];
+    if (singleAccelF) critFail.push('movement');
+    if (singleHrF) critFail.push('heart rate');
+    if (singleSoundFailed) critFail.push('sound level');
+    return {
+      success: false,
+      criteriaFailed: critFail,
+    };
   }
 
   const boolToInt = (b) => (b ? 1 : 0);
@@ -119,13 +130,27 @@ const failForRows = (
 
   console.log(maxFailed, 'aaa');
 
-  return maxFailed < TWO_CRITERIA_FAILURE_FRAC * totalTimeMs;
+  const success = maxFailed < TWO_CRITERIA_FAILURE_FRAC * totalTimeMs;
+  let critFailed = [];
+
+  if (tS < tA && tS < tHR) {
+    critFailed = ['movement', 'heart rate'];
+  } else if (tA < tS && tA < tHR) {
+    critFailed = ['heart rate', 'sound level'];
+  } else {
+    critFailed = ['movement', 'sound level'];
+  }
+
+  return {
+    success,
+    criteriaFailed: critFailed,
+  };
 };
 
 export const calculateIsFocused = async (
   timeStartMillis: number,
   timeEndMillis: number
-): Promise<boolean> => {
+): Promise<IRet> => {
   const rows = await readCSV();
   let initIdx = -1;
   const rowsWithinTime = rows.filter((r, i) => {
@@ -138,7 +163,7 @@ export const calculateIsFocused = async (
     }
     return r.time >= timeStartMillis && r.time <= timeEndMillis;
   });
-  if (!rowsWithinTime[0]) return true;
+  if (!rowsWithinTime[0]) return { success: true, criteriaFailed: [] };
 
   return failForRows(
     rowsWithinTime,

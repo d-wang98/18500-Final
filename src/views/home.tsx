@@ -38,8 +38,8 @@ export default function Home() {
         const r = await (myStoreState.contract as any).get_results({
           user: myStoreState.wallet.getAccountId(),
         });
-        setSuccesses(r.successes)
-        setFails(r.failures)
+        setSuccesses(r.successes);
+        setFails(r.failures);
       };
       getData();
     }
@@ -53,25 +53,44 @@ export default function Home() {
           display: 'grid',
           alignItems: 'center',
           justifyContent: 'center',
-          gridTemplateColumns: '1fr 1fr 1fr 1fr',
+          gridTemplateColumns: '2fr 1fr 2fr 1fr 2fr',
           textAlign: 'left',
           gap: '1rem',
           width: 'auto',
         }}
       >
+        {!myStoreState.wallet ||
+          (!myStoreState.wallet.isSignedIn() && (
+            <>
+              <Link to="/login">
+                <Button variant="contained" onClick={handleLogin}>
+                  Login/Signup
+                </Button>
+              </Link>
+              <h1>&rarr;</h1>
+            </>
+          ))}
+
+        <Link to="/connect-device">
+          <Button variant="contained">Connect Device</Button>
+        </Link>
+        <h1>&rarr;</h1>
         <Link to="/session">
           <Button onClick={handleStartSession} variant="contained">
             Start Paymodoro
           </Button>
         </Link>
-        <Link to="/connect-device">
-          <Button variant="contained">Connect Device</Button>
-        </Link>
-        <Link to="/login">
-          <Button variant="contained" onClick={handleLogin}>
-            Login/Signup
-          </Button>
-        </Link>
+
+        {myStoreState.wallet && myStoreState.wallet.isSignedIn() && (
+          <>
+            <h1>&rarr;</h1>
+            <Link to="/login">
+              <Button variant="contained" onClick={handleLogin}>
+                Sign out
+              </Button>
+            </Link>
+          </>
+        )}
       </div>
       {myStoreState.wallet && myStoreState.wallet.isSignedIn() && (
         <>
