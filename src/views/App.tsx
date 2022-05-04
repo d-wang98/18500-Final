@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 import './App.css';
 import Button from '@mui/material/Button';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
@@ -11,9 +11,9 @@ import * as nearAPI from 'near-api-js';
 import { useStore } from 'react-stores';
 import { myStore, SESSION_STARTED } from './store';
 import { calculateIsFocused } from '../utils/algorithm';
+import { contractName } from '../utils/constants';
 
 export default function App() {
-
   const [state, setState] = useState({
     loggedIn: false,
   });
@@ -37,7 +37,7 @@ export default function App() {
 
     const contract = new nearAPI.Contract(
       wallet.account(), // the account object that is connecting
-      'dev-1649192632895-28253046722360',
+      contractName,
       {
         // name of contract you're connecting to
         viewMethods: ['get_active_users', 'get_results'], // view methods do not change state but usually return a value

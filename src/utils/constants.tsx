@@ -1,0 +1,1 @@
+export const contractName = 'dev-1651692127372-81068268214379'

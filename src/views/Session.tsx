@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import Button from '@mui/material/Button';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { csv } from 'd3';
 import {
   defaultRedirectUrl,
@@ -17,6 +17,7 @@ const totalTimeMs = 10 * 1000; // 10 s
 
 export default function Session() {
   const store = useStore(myStore);
+  const nav = useNavigate();
 
   const [state, setState] = useState({
     timeElapsed: 0,
@@ -70,6 +71,7 @@ export default function Session() {
 
     const success = await calculateIsFocused(startTime, _endTime);
     console.log(success);
+    setIsActive(false);
     alert(
       `Your pomodoro session is complete. You ${
         success ? 'succeeded' : 'failed'
@@ -82,6 +84,7 @@ export default function Session() {
       gas: '300000000000000',
       callbackUrl: `${defaultRedirectUrl}#/${SESSION_ENDED}`,
     });
+    nav('/');
   };
 
   function toggle() {
@@ -166,14 +169,10 @@ export default function Session() {
         >
           {isActive ? 'Running' : 'Start'}
         </button>
-        <button className="button" onClick={reset}>
-          Reset
-        </button>
+        <button onClick={() => endSession()}>End Session</button>
       </div>
       <Link to="/">
-        <Button onClick={() => endSession()} variant="contained">
-          End Session
-        </Button>
+        <Button>Back</Button>
       </Link>
       <img src="mario.png" alt="" />
     </div>

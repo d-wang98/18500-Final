@@ -6,6 +6,7 @@ import * as nearAPI from 'near-api-js';
 import { getThemeProps } from '@mui/system';
 import { useStore } from 'react-stores';
 import { defaultRedirectUrl, myStore } from './store';
+import { contractName } from '../utils/constants';
 
 export default function Login({ isLoggedIn }) {
   const [state, setState] = useState({
@@ -33,7 +34,7 @@ export default function Login({ isLoggedIn }) {
       isLoggedIn = true;
 
       myStoreState.wallet.requestSignIn(
-        'dev-1649192632895-28253046722360', // contract requesting access
+        contractName, // contract requesting access
         defaultRedirectUrl,
         defaultRedirectUrl
       );

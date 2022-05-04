@@ -6,10 +6,9 @@ import { useStore } from 'react-stores';
 import { myStore, SESSION_ENDED, SESSION_STARTED } from './store';
 
 export default function Home() {
-  const [state, setState] = useState({
-    loggedIn: false,
-  });
   const myStoreState = useStore(myStore);
+  const [successes, setSuccesses] = useState(0);
+  const [fails, setFails] = useState(0);
 
   const handleLogin = () => {
     console.log('login');
@@ -33,6 +32,18 @@ export default function Home() {
       nav('/session#ended');
     }
   }, []);
+  useEffect(() => {
+    if (myStoreState.wallet && myStoreState.wallet.isSignedIn()) {
+      const getData = async () => {
+        const r = await (myStoreState.contract as any).get_results({
+          user: myStoreState.wallet.getAccountId(),
+        });
+        setSuccesses(r.successes)
+        setFails(r.failures)
+      };
+      getData();
+    }
+  }, [myStoreState]);
 
   return (
     <div className="main-wrapper">
@@ -62,9 +73,13 @@ export default function Home() {
           </Button>
         </Link>
       </div>
-      <h2>Tokens Earned: 4</h2>
-      <h2>Sessions Completed: 6</h2>
-      <h2>Sessions Failed: 2</h2>
+      {myStoreState.wallet && myStoreState.wallet.isSignedIn() && (
+        <>
+          <h2>Session Successes: {successes}</h2>
+          <h2>Sessions Failed: {fails}</h2>
+          <h2>Sessions Completed: {successes + fails}</h2>
+        </>
+      )}
       <img src="tomato.png" alt="" />
     </div>
   );
